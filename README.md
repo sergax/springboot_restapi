@@ -23,4 +23,4 @@ MODERATOR - добавление и удаление файлов
   
 USER - только чтение всех данных, кроме User
 
-Технологии: Java, MySQL, Spring (IoC, Data, Sercurity), AWS SDK, MySQL, Docker, JUnit, Mockito, Gradle.
+~Технологии: Java, MySQL, Spring (IoC, Data, Sercurity), AWS SDK, MySQL, Docker, JUnit, Mockito, Gradle.~
