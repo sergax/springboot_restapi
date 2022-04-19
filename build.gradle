@@ -1,5 +1,5 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.6'
+	id 'org.springframework.boot' version '2.6.5'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 }
@@ -31,6 +31,7 @@ dependencies {
 //	implementation 'org.flywaydb:flyway-core:8.4.4'
 //	implementation 'org.flywaydb:flyway-mysql:8.4.4'
 	implementation 'com.amazonaws:aws-java-sdk:1.11.805'
+	implementation 'io.jsonwebtoken:jjwt:0.2'
 }
 
 tasks.named('test') {

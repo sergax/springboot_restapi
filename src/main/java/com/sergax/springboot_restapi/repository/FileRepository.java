@@ -1,8 +1,7 @@
 package com.sergax.springboot_restapi.repository;
 
+import com.sergax.springboot_restapi.model.File;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.io.File;
 
 /**
  * by Aksenchenko Serhii on 17.04.2022

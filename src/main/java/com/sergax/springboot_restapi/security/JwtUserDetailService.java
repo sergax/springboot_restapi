@@ -11,13 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
  * by Aksenchenko Serhii on 18.04.2022
  */
 
-@Service
+@Component
 @Slf4j
 @RequiredArgsConstructor
 public class JwtUserDetailService implements UserDetailsService {
@@ -26,7 +27,10 @@ public class JwtUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         User user = userServise.findByLogin(login);
-        if (user == null) throw new UsernameNotFoundException("Not found User by Login : " + login);
+        if (user == null) {
+            log.error("User not found in Database");
+            throw new UsernameNotFoundException("Not found User by Login : " + login);
+        }
         JwtUser jwtUser = JwtUserFactory.create(user);
         log.info("User with login : {} was loaded", login);
         return jwtUser;
