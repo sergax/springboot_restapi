@@ -5,13 +5,16 @@ import com.sergax.springboot_restapi.dto.AuthenticationRequestDto;
 import com.sergax.springboot_restapi.model.User;
 import com.sergax.springboot_restapi.security.jwt.JwtTokenProvider;
 import com.sergax.springboot_restapi.service.UserServise;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,13 +28,22 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/auth/")
-@RequiredArgsConstructor
 public class AuthenticationControllerV1 {
-    private AuthenticationManager authenticationManager;
-    private JwtTokenProvider jwtTokenProvider;
-    private UserServise userServise;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserServise userServise;
 
-    public ResponseEntity<?> login(@RequestBody AuthenticationRequestDto requestDto) {
+    @Autowired
+    public AuthenticationControllerV1(AuthenticationManager authenticationManager,
+                                      JwtTokenProvider jwtTokenProvider,
+                                      UserServise userServise) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.userServise = userServise;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto) {
         try {
             String login = requestDto.getLogin();
             authenticationManager.authenticate(

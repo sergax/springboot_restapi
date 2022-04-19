@@ -1,5 +1,6 @@
 package com.sergax.springboot_restapi.security.jwt;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,9 +17,9 @@ import java.io.IOException;
  * by Aksenchenko Serhii on 19.04.2022
  */
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class JwtTokenFilter extends GenericFilterBean {
-    private final JwtTokenProvider jwtTokenProvider;
+    private JwtTokenProvider jwtTokenProvider;
 
     @Override
     public void doFilter(ServletRequest request,
