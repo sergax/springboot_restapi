@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * by Aksenchenko Serhii on 17.04.2022
@@ -27,6 +28,7 @@ public class Event {
     @JoinColumn(name = "user_id")
     private User users;
 
-    @OneToOne(mappedBy = "event", cascade = CascadeType.ALL)
-    private File file;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "file_id")
+    private File files;
 }

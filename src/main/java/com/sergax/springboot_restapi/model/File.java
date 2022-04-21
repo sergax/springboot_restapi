@@ -26,8 +26,4 @@ public class File {
 
     @Column(name = "location")
     private String location;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "event_id")
-    private Event event;
 }
