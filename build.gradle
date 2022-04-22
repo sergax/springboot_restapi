@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.5'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.6.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
 }
 
 group = 'com.sergax'
@@ -9,31 +9,35 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	runtimeOnly 'mysql:mysql-connector-java'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    runtimeOnly 'mysql:mysql-connector-java'
 //	implementation 'org.flywaydb:flyway-core:8.4.4'
 //	implementation 'org.flywaydb:flyway-mysql:8.4.4'
-	implementation 'com.amazonaws:aws-java-sdk:1.11.805'
-	implementation 'io.jsonwebtoken:jjwt:0.2'
+    implementation 'software.amazon.awssdk:s3:2.16.39'
+//	implementation 'com.amazonaws:aws-java-sdk:1.11.805'
+    implementation 'io.jsonwebtoken:jjwt:0.2'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
+
+    systemProperty('aws.accessKeyId','AKIAZLECZNGC32SFVC4E')
+    systemProperty('aws.secretAccessKey', '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')
 }

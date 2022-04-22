@@ -1,17 +1,14 @@
 package com.sergax.springboot_restapi.controller;
 
 import com.sergax.springboot_restapi.dto.EventDto;
-import com.sergax.springboot_restapi.dto.UserDto;
 import com.sergax.springboot_restapi.exception.EventNotFoundException;
 import com.sergax.springboot_restapi.model.Event;
-import com.sergax.springboot_restapi.model.User;
 import com.sergax.springboot_restapi.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,12 +40,5 @@ public class EventController {
             throw new EventNotFoundException(id);
         }
         return ResponseEntity.ok(EventDto.fromEvent(event));
-    }
-
-    @PostMapping("/events")
-    ResponseEntity<?> newEvent(@RequestBody Event event) {
-        Event newEvent = eventService.create(event);
-
-        return ResponseEntity.ok(newEvent);
     }
 }

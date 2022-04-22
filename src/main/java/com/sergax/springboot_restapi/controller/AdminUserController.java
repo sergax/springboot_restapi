@@ -5,13 +5,9 @@ import com.sergax.springboot_restapi.exception.UserNotFoundException;
 import com.sergax.springboot_restapi.model.User;
 import com.sergax.springboot_restapi.service.UserServise;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,13 +17,13 @@ import java.util.stream.Collectors;
  */
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/admin/")
 @RequiredArgsConstructor
-public class UserController {
+public class AdminUserController {
     private final UserServise userServise;
 
     @GetMapping("/users")
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<?> all() {
         List<User> user = userServise.getAll();
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -38,11 +34,19 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<UserDto> getById(@PathVariable Long id) {
+    public ResponseEntity<?> one(@PathVariable Long id) {
         User user = userServise.findById(id);
         if (user == null) {
             throw new UserNotFoundException(id);
         }
+
         return ResponseEntity.ok(UserDto.fromUser(user));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        userServise.delete(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

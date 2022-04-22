@@ -31,12 +31,4 @@ public class EventDto {
         eventDto.setFileName(event.getFiles().getFileName());
         return eventDto;
     }
-
-    public static List<EventDto> fromListEvents(List<Event> events) {
-        List<EventDto> eventDtos = new ArrayList<>();
-        for (Event event : events) {
-            eventDtos.add(fromEvent(event));
-        }
-        return eventDtos;
-    }
 }

@@ -15,11 +15,21 @@ public class FileDto {
     private String fileName;
     private String location;
 
+    public File toEntity() {
+        File file = new File();
+        file.setId(id);
+        file.setFileName(fileName);
+        file.setLocation(location);
+
+        return file;
+    }
+
     public static FileDto fromFile(File file) {
         FileDto fileDto = new FileDto();
         fileDto.setId(file.getId());
         fileDto.setFileName(file.getFileName());
         fileDto.setLocation(fileDto.getLocation());
+
         return fileDto;
     }
 }
