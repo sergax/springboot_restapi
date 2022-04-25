@@ -22,11 +22,17 @@ import java.util.List;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserServise {
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, EventRepository eventRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.eventRepository = eventRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public List<User> getAll() {

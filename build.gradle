@@ -2,34 +2,11 @@ plugins {
     id 'org.springframework.boot' version '2.6.5'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
-    id 'com.palantir.docker' version '0.22.1'
-    id 'com.palantir.docker-run' version '0.22.1'
 }
 
 group = 'com.sergax'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
-version = '0.1.0'
-
-docker {
-    name '${project.name}:${project.version}'
-    files 'springboot_restapi.jar'
-}
-
-dockerRun {
-    name '${project.name}'
-    image '${project.name}:${project.version}'
-    ports '8080:8080'
-    clean true
-}
-
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Implementation-Title': 'Gradle Jar File Example',
-                'Main-Class': 'com/sergax/springboot_restapi'
-    }
-    with jar
-}
+sourceCompatibility = '11'
 
 configurations {
     compileOnly {
@@ -39,6 +16,11 @@ configurations {
 
 repositories {
     mavenCentral()
+}
+
+jar {
+    baseName("springboot_restapi")
+    version("0.0.1")
 }
 
 dependencies {
@@ -60,7 +42,7 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
-
-    systemProperty('aws.accessKeyId', 'AKIAZLECZNGC32SFVC4E')
-    systemProperty('aws.secretAccessKey', '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')
 }
+
+//systemProperty('aws.accessKeyId', 'AKIAZLECZNGC32SFVC4E')
+//systemProperty('aws.secretAccessKey', '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')

@@ -20,9 +20,13 @@ import org.springframework.stereotype.Service;
 
 @Component
 @Slf4j
-@RequiredArgsConstructor
 public class JwtUserDetailService implements UserDetailsService {
     private final UserServise userServise;
+
+    @Autowired
+    public JwtUserDetailService(UserServise userServise) {
+        this.userServise = userServise;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
