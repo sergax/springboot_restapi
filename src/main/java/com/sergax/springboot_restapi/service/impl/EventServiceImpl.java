@@ -2,6 +2,8 @@ package com.sergax.springboot_restapi.service.impl;
 
 import com.sergax.springboot_restapi.exception.EventNotFoundException;
 import com.sergax.springboot_restapi.model.Event;
+import com.sergax.springboot_restapi.model.File;
+import com.sergax.springboot_restapi.model.User;
 import com.sergax.springboot_restapi.repository.EventRepository;
 import com.sergax.springboot_restapi.service.EventService;
 import lombok.RequiredArgsConstructor;
@@ -38,9 +40,12 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event create(Event event) {
-        Event newEvent = eventRepository.save(event);
-        log.info("Created New Event : {}", newEvent);
-        return newEvent;
+        event.setEventName(event.getEventName());
+        event.setUsers(event.getUsers());
+        event.setFiles(event.getFiles());
+        eventRepository.save(event);
+        log.info("Created New Event : {}", event);
+        return event;
     }
 
     @Override

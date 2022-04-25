@@ -23,7 +23,7 @@ public class AdminUserController {
     private final UserServise userServise;
 
     @GetMapping("/users")
-    public ResponseEntity<?> all() {
+    public ResponseEntity<?> allUsers() {
         List<User> user = userServise.getAll();
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -34,12 +34,11 @@ public class AdminUserController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<?> one(@PathVariable Long id) {
+    public ResponseEntity<?> oneUserById(@PathVariable Long id) {
         User user = userServise.findById(id);
-        if (user == null) {
+        if (id == null) {
             throw new UserNotFoundException(id);
         }
-
         return ResponseEntity.ok(UserDto.fromUser(user));
     }
 

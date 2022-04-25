@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  mysql:
+    image: mysql
+    container_name: java-mysql
+    environment:
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=Aks-662828
+      - MYSQL_DB=springboot_restapi
+  app:
+    build: ./Dockerfile
+    container_name: java-app
+    ports:
+      - 8080:8080
+

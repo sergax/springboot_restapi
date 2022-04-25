@@ -1,12 +1,16 @@
 package com.sergax.springboot_restapi.service.impl;
 
 import com.sergax.springboot_restapi.exception.UserNotFoundException;
+import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.User;
+import com.sergax.springboot_restapi.repository.EventRepository;
 import com.sergax.springboot_restapi.repository.UserRepository;
 import com.sergax.springboot_restapi.service.UserServise;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserServise {
     private final UserRepository userRepository;
+    private final EventRepository eventRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
@@ -35,6 +40,13 @@ public class UserServiceImpl implements UserServise {
         User user = userRepository.findByLogin(login);
         log.info("Found User : {} by Login : {}", user, login);
         return user;
+    }
+
+    @Override
+    public List<Event> allEvents() {
+        List<Event> eventList = eventRepository.findAll();
+        log.info("All Events : {}", eventList);
+        return eventList;
     }
 
     @Override
