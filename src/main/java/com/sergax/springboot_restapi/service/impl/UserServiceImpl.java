@@ -9,8 +9,10 @@ import com.sergax.springboot_restapi.service.UserServise;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,17 +24,10 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserServise {
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, EventRepository eventRepository, BCryptPasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.eventRepository = eventRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     public List<User> getAll() {
@@ -66,7 +61,7 @@ public class UserServiceImpl implements UserServise {
     @Override
     public User create(User user) {
         user.setLogin(user.getLogin());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(BCrypt.gensalt(user.getPassword()));
         user.setFirstNAme(user.getFirstNAme());
         user.setLastNAme(user.getLastNAme());
         user.setEmail(user.getEmail());

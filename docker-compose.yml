@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  db:
+  mysql:
     image: mysql
     container_name: java-mysql
     environment:
@@ -10,9 +10,11 @@ services:
 
   app:
     build:
-      dockerfile: ./docker/Dockerfile
-      context: ..
+      dockerfile: ./Dockerfile
+      context: .
     container_name: java-app
+    ports:
+      - 8080:8080
 
 
 
