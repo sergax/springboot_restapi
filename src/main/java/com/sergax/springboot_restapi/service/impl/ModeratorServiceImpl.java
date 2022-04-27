@@ -3,7 +3,6 @@ package com.sergax.springboot_restapi.service.impl;
 import com.amazonaws.services.s3.model.S3Object;
 import com.sergax.springboot_restapi.model.File;
 import com.sergax.springboot_restapi.model.User;
-import com.sergax.springboot_restapi.repository.EventRepository;
 import com.sergax.springboot_restapi.repository.FileRepository;
 import com.sergax.springboot_restapi.repository.UserRepository;
 import com.sergax.springboot_restapi.service.AWSService;
@@ -30,7 +29,7 @@ public class ModeratorServiceImpl implements ModeratorService {
     private final AWSService awsService;
 
     @Override
-    public void upload(Long userId, String bucket, String path) {
+    public File upload(Long userId, String bucket, String path) {
         S3Object s3Object = awsService.upload(bucket, path);
 
         File file = new File();
@@ -45,6 +44,7 @@ public class ModeratorServiceImpl implements ModeratorService {
         eventService.createEvent(user, file,
                 "Uploaded File : " + file.getId() +
                         " to User ID : " + userId);
+        return file;
     }
 
     @SneakyThrows

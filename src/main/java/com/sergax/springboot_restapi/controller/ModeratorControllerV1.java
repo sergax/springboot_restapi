@@ -1,14 +1,12 @@
 package com.sergax.springboot_restapi.controller;
 
+import com.sergax.springboot_restapi.model.File;
 import com.sergax.springboot_restapi.service.ModeratorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * by Aksenchenko Serhii on 27.04.2022
@@ -16,15 +14,32 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/moderator/")
-@PreAuthorize("hasAnyRole('MODER_ROLE','ADMIN')")
+@PreAuthorize("hasAnyRole('MODER_ROLE','ADMIN_ROLE')")
 @RequiredArgsConstructor
 public class ModeratorControllerV1 {
     private final ModeratorService moderatorService;
 
-    @PostMapping("/files/{userId}/{fileId}")
-    public ResponseEntity<Void> setFileForUser(@PathVariable Long userId,
-                                               @PathVariable Long fileId) {
+    @PostMapping("/files/set/{userId}/{fileId}")
+    public ResponseEntity<?> setFileForUser(@PathVariable Long userId,
+                                            @PathVariable Long fileId) {
         moderatorService.setFile(userId, fileId);
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PutMapping("/files/upload/{userId}/{bucket}/{filePath}")
+    public ResponseEntity<?> uploadFile(@PathVariable Long userId,
+                                        @PathVariable String bucket,
+                                        @PathVariable String path) {
+        File file = moderatorService.upload(userId, bucket, path);
+
+        return ResponseEntity.ok(file);
+    }
+
+    @DeleteMapping("/files/{id}")
+    public ResponseEntity<?> deleteFile(@PathVariable Long fileId) {
+        moderatorService.deleteFileById(fileId);
+
+        return ResponseEntity.noContent().build();
     }
 }
