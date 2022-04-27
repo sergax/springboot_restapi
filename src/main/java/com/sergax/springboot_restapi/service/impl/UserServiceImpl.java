@@ -1,21 +1,20 @@
 package com.sergax.springboot_restapi.service.impl;
 
-import com.sergax.springboot_restapi.exception.UserNotFoundException;
+import com.sergax.springboot_restapi.exception.EventNotFoundException;
 import com.sergax.springboot_restapi.model.Event;
-import com.sergax.springboot_restapi.model.User;
+import com.sergax.springboot_restapi.model.File;
 import com.sergax.springboot_restapi.repository.EventRepository;
-import com.sergax.springboot_restapi.repository.UserRepository;
+import com.sergax.springboot_restapi.repository.FileRepository;
 import com.sergax.springboot_restapi.service.UserServise;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.events.EventException;
 
+import java.io.FileNotFoundException;
+import java.nio.file.Files;
 import java.util.List;
 
 /**
@@ -24,63 +23,47 @@ import java.util.List;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserServiceImpl implements UserServise {
-    private final UserRepository userRepository;
     private final EventRepository eventRepository;
+    private final FileRepository fileRepository;
 
+
+    @SneakyThrows
     @Override
-    public List<User> getAll() {
-        List<User> users = userRepository.findAll();
-        log.info("All Users : {}", users.size());
-        return users;
+    public File getFileById(Long id) {
+        File file = fileRepository.findById(id)
+                .orElseThrow(() -> new FileNotFoundException("File doesn't exist by id : " + id));
+
+        log.info("File : {} ; by id : {}", file, id);
+        return file;
+    }
+
+    @SneakyThrows
+    @Override
+    public List<File> allFiles() {
+        List<File> fileList = fileRepository.findAll();
+        if (fileList == null) throw new FileNotFoundException("Empty List of Files :(");
+
+        log.info("All Files : {}", fileList);
+        return fileList;
     }
 
     @Override
-    public User findByLogin(String login) {
-        User user = userRepository.findByLogin(login);
-        log.info("Found User : {} by Login : {}", user, login);
-        return user;
+    public Event getEventById(Long id) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new EventNotFoundException(id));
+
+        log.info("Event : {} ; by id : {}", event, id);
+        return null;
     }
 
     @Override
     public List<Event> allEvents() {
         List<Event> eventList = eventRepository.findAll();
+        if (eventList == null) throw new EventNotFoundException("Empty List of Events :(");
+
         log.info("All Events : {}", eventList);
         return eventList;
-    }
-
-    @Override
-    public User findById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
-        log.info("Found User : {} by Id : {}", user, id);
-        return user;
-    }
-
-    @Override
-    public User create(User user) {
-        user.setLogin(user.getLogin());
-        user.setPassword(BCrypt.gensalt(user.getPassword()));
-        user.setFirstNAme(user.getFirstNAme());
-        user.setLastNAme(user.getLastNAme());
-        user.setEmail(user.getEmail());
-        user.setEvents(user.getEvents());
-        User newUser = userRepository.save(user);
-        log.info("Created New User : {}", newUser);
-        return newUser;
-    }
-
-    @Override
-    public User update(User user) {
-        User updatedUser = userRepository.save(user);
-        log.info("Updated User : {}", updatedUser);
-        return updatedUser;
-    }
-
-    @Override
-    public void delete(Long id) {
-        userRepository.deleteById(id);
-        log.info("User by Id : {} was deleted", id);
     }
 }

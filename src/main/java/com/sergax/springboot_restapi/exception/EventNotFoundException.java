@@ -7,4 +7,8 @@ public class EventNotFoundException extends RuntimeException {
     public EventNotFoundException(Long id) {
         super("Couldn't find Event by this id : " + id);
     }
+
+    public EventNotFoundException(String message) {
+        super(message);
+    }
 }

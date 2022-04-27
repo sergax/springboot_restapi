@@ -24,8 +24,8 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "login")
-    private String login;
+    @Column(name = "role_name")
+    private String roleName;
 
     @ManyToMany(mappedBy = "roles")
     List<User> users;

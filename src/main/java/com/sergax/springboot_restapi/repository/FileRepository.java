@@ -1,6 +1,7 @@
 package com.sergax.springboot_restapi.repository;
 
 import com.sergax.springboot_restapi.model.File;
+import lombok.SneakyThrows;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

@@ -21,7 +21,7 @@ public class RoleDto {
     public static RoleDto fromRole(Role role) {
         RoleDto roleDto = new RoleDto();
         roleDto.setId(role.getId());
-        roleDto.setLogin(role.getLogin());
+        roleDto.setLogin(role.getRoleName());
         return roleDto;
     }
 }
