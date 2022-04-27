@@ -1,10 +1,13 @@
 package com.sergax.springboot_restapi.service.impl;
 
 import com.sergax.springboot_restapi.exception.EventNotFoundException;
+import com.sergax.springboot_restapi.exception.UserNotFoundException;
 import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.File;
+import com.sergax.springboot_restapi.model.User;
 import com.sergax.springboot_restapi.repository.EventRepository;
 import com.sergax.springboot_restapi.repository.FileRepository;
+import com.sergax.springboot_restapi.repository.UserRepository;
 import com.sergax.springboot_restapi.service.UserServise;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +28,19 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 public class UserServiceImpl implements UserServise {
+    private final UserRepository userRepository;
     private final EventRepository eventRepository;
     private final FileRepository fileRepository;
 
+
+    @Override
+    public User getByLogin(String login) {
+        User user = userRepository.findByLogin(login);
+        if (user == null) throw new UserNotFoundException(login);
+
+        log.info("User : {} ; by Login : {}", user, login);
+        return user;
+    }
 
     @SneakyThrows
     @Override

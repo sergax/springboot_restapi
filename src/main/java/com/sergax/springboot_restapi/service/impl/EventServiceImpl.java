@@ -6,7 +6,6 @@ import com.sergax.springboot_restapi.model.User;
 import com.sergax.springboot_restapi.repository.EventRepository;
 import com.sergax.springboot_restapi.service.EventService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +31,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getAllEventsByUserId(Long userId) {
-        return eventRepository.getEventByUserId(userId);
+    public List<Event> allEvents() {
+        return eventRepository.findAll();
     }
 }

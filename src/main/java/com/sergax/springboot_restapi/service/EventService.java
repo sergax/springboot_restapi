@@ -12,5 +12,5 @@ import java.util.List;
 public interface EventService {
     void createEvent(User user, File file, String eventName);
 
-    List<Event> getAllEventsByUserId(Long userId);
+    List<Event> allEvents();
 }

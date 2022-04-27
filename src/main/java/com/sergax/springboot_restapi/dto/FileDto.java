@@ -1,9 +1,13 @@
 package com.sergax.springboot_restapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.File;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * by Aksenchenko Serhii on 19.04.2022
@@ -32,4 +36,5 @@ public class FileDto {
 
         return fileDto;
     }
+
 }

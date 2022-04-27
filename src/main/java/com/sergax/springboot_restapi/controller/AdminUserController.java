@@ -1,8 +1,11 @@
 package com.sergax.springboot_restapi.controller;
 
+import com.sergax.springboot_restapi.dto.EventDto;
 import com.sergax.springboot_restapi.dto.UserDto;
 import com.sergax.springboot_restapi.exception.UserNotFoundException;
+import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.User;
+import com.sergax.springboot_restapi.service.AdminService;
 import com.sergax.springboot_restapi.service.UserServise;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,11 +23,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/admin/")
 @RequiredArgsConstructor
 public class AdminUserController {
-    private final UserServise userServise;
+    private final AdminService adminService;
 
     @GetMapping("/users")
     public ResponseEntity<?> allUsers() {
-        List<User> user = userServise.getAll();
+        List<User> user = adminService.allUsers();
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -33,19 +36,45 @@ public class AdminUserController {
         return ResponseEntity.ok(userDtoList);
     }
 
+    @GetMapping("/events")
+    public ResponseEntity<?> allEvents() {
+        List<Event> events = adminService.allEvents();
+        if (events == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        List<EventDto> eventDtoList = events.stream().map(EventDto::fromEvent).collect(Collectors.toList());
+        return ResponseEntity.ok(eventDtoList);
+    }
+
     @GetMapping("/users/{id}")
     public ResponseEntity<?> oneUserById(@PathVariable Long id) {
-        User user = userServise.findById(id);
-        if (id == null) {
+        User user = adminService.getUserById(id);
+        if (user == null) {
             throw new UserNotFoundException(id);
         }
         return ResponseEntity.ok(UserDto.fromUser(user));
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/events/{id}")
+    public ResponseEntity<?> oneEventById(@PathVariable Long id) {
+        Event event = adminService.getEventById(id);
+        if (event == null) {
+            throw new UserNotFoundException(id);
+        }
+        return ResponseEntity.ok(EventDto.fromEvent(event));
+    }
+
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        userServise.delete(id);
+        adminService.deleteUser(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/set/{userId}/{fileId}")
+    public ResponseEntity<Void> setFileToUser(@PathVariable Long userId,
+                                              @PathVariable Long fileId) {
+        return null;
     }
 }

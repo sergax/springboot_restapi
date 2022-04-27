@@ -4,6 +4,7 @@ package com.sergax.springboot_restapi.controller;
 import com.sergax.springboot_restapi.dto.AuthenticationRequestDto;
 import com.sergax.springboot_restapi.model.User;
 import com.sergax.springboot_restapi.security.jwt.JwtTokenProvider;
+import com.sergax.springboot_restapi.service.AdminService;
 import com.sergax.springboot_restapi.service.UserServise;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -43,12 +44,12 @@ public class AuthenticationControllerV1 {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto) {
+    public ResponseEntity<?> login(@RequestBody AuthenticationRequestDto requestDto) {
         try {
             String login = requestDto.getLogin();
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(login, requestDto.getPassword()));
-            User user = userServise.findByLogin(login);
+            User user = userServise.getByLogin(login);
 
             if (user == null) {
                 throw new UsernameNotFoundException("Not found login");

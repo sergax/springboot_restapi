@@ -24,6 +24,7 @@ public class AWSClientConfig {
         );
     }
 
+    @Bean
     public AmazonS3 getS3client() {
         return AmazonS3ClientBuilder
                 .standard()
