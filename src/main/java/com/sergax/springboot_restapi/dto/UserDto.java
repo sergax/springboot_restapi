@@ -15,6 +15,7 @@ import java.util.List;
 @Data
 public class UserDto {
     private Long id;
+    private String password;
     private String login;
     private String firstName;
     private String lastName;
@@ -26,8 +27,8 @@ public class UserDto {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setLogin(user.getLogin());
-        userDto.setFirstName(user.getFirstNAme());
-        userDto.setLastName(user.getLastNAme());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail());
 
         List<RoleDto> roles = new ArrayList<>();

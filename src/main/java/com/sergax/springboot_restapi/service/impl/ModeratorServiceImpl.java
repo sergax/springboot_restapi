@@ -1,6 +1,7 @@
 package com.sergax.springboot_restapi.service.impl;
 
 import com.amazonaws.services.s3.model.S3Object;
+import com.sergax.springboot_restapi.exception.UserNotFoundException;
 import com.sergax.springboot_restapi.model.File;
 import com.sergax.springboot_restapi.model.User;
 import com.sergax.springboot_restapi.repository.FileRepository;
@@ -54,6 +55,7 @@ public class ModeratorServiceImpl implements ModeratorService {
         if (file == null) throw new FileNotFoundException("Couldn't found File by ID : " + fileId);
 
         User user = userRepository.findUserById(userId);
+        if(user == null) throw new UserNotFoundException("Couldn't found User by ID : " + userId);
 
         eventService.createEvent(user, file,
                 "Set File : " + file.getId() +

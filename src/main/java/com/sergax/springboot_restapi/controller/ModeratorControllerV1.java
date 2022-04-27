@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/moderator/")
-@PreAuthorize("hasAnyRole('MODER_ROLE','ADMIN_ROLE')")
+@PreAuthorize("hasAnyRole('MODER','ADMIN')")
 @RequiredArgsConstructor
 public class ModeratorControllerV1 {
     private final ModeratorService moderatorService;

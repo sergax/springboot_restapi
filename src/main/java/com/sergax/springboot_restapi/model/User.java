@@ -22,10 +22,10 @@ public class User {
     private Long id;
 
     @Column(name = "first_name")
-    private String firstNAme;
+    private String firstName;
 
     @Column(name = "last_name")
-    private String lastNAme;
+    private String lastName;
 
     @Column(name = "login")
     private String login;

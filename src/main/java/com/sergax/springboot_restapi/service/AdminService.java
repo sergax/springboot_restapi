@@ -1,6 +1,8 @@
 package com.sergax.springboot_restapi.service;
 
+import com.sergax.springboot_restapi.dto.UserDto;
 import com.sergax.springboot_restapi.model.Event;
+import com.sergax.springboot_restapi.model.File;
 import com.sergax.springboot_restapi.model.User;
 
 import java.util.List;
@@ -12,7 +14,11 @@ import java.util.List;
 public interface AdminService {
     User getUserById(Long id);
 
-    User createUser(User user);
+    User createUser(UserDto userDto);
+
+    void setRoleForUser(Long userId, String roleName);
+
+    void setEventForUser(Long userId, Long eventId);
 
     void deleteUser(Long id);
 
@@ -22,10 +28,6 @@ public interface AdminService {
 
     List<Event> allEvents();
 
-    void upload(Long userId, String bucket, String path);
-
-    void setFile(Long userId, Long fileId);
-
-    void deleteFileById(Long id);
+    List<File> allFiles();
 
 }
