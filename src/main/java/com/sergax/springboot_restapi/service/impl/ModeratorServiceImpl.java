@@ -43,7 +43,7 @@ public class ModeratorServiceImpl implements ModeratorService {
         User user = userRepository.findUserById(userId);
 
         eventService.createEvent(user, file,
-                "Uploaded File : " + file.getId() +
+                "Uploaded File ID : " + file.getId() +
                         " to User ID : " + userId);
         return file;
     }
@@ -58,7 +58,7 @@ public class ModeratorServiceImpl implements ModeratorService {
         if(user == null) throw new UserNotFoundException("Couldn't found User by ID : " + userId);
 
         eventService.createEvent(user, file,
-                "Set File : " + file.getId() +
+                "Set File ID : " + file.getId() +
                         " to User ID : " + userId);
     }
 

@@ -6,6 +6,7 @@ import com.sergax.springboot_restapi.model.File;
 import com.sergax.springboot_restapi.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,17 +18,21 @@ import java.util.List;
 @Data
 public class EventDto {
     private Long id;
+    private Long userId;
     private String eventName;
     private String firstName;
     private String lastName;
+    private Long fileId;
     private String fileName;
 
     public static EventDto fromEvent(Event event) {
         EventDto eventDto = new EventDto();
         eventDto.setId(event.getId());
+        eventDto.setUserId(event.getUsers().getId());
         eventDto.setEventName(event.getEventName());
-        eventDto.setFirstName(event.getUsers().getFirstNAme());
-        eventDto.setLastName(event.getUsers().getLastNAme());
+        eventDto.setFirstName(event.getUsers().getFirstName());
+        eventDto.setLastName(event.getUsers().getLastName());
+        eventDto.setFileId(event.getFiles().getId());
         eventDto.setFileName(event.getFiles().getFileName());
         return eventDto;
     }

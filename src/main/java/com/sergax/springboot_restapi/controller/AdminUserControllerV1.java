@@ -1,13 +1,13 @@
 package com.sergax.springboot_restapi.controller;
 
 import com.sergax.springboot_restapi.dto.EventDto;
+import com.sergax.springboot_restapi.dto.RoleDto;
 import com.sergax.springboot_restapi.dto.UserDto;
 import com.sergax.springboot_restapi.exception.UserNotFoundException;
 import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.File;
+import com.sergax.springboot_restapi.model.Role;
 import com.sergax.springboot_restapi.model.User;
-import com.sergax.springboot_restapi.repository.EventRepository;
-import com.sergax.springboot_restapi.repository.FileRepository;
 import com.sergax.springboot_restapi.repository.RoleRepository;
 import com.sergax.springboot_restapi.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdminUserControllerV1 {
     private final AdminService adminService;
-    private final RoleRepository roleRepository;
-    private final EventRepository eventRepository;
     private final ModeratorControllerV1 moderatorControllerV1;
-    private final FileRepository fileRepository;
 
     @GetMapping("/users")
     public ResponseEntity<?> allUsers() {
@@ -52,11 +49,11 @@ public class AdminUserControllerV1 {
         return ResponseEntity.ok(UserDto.fromUser(user));
     }
 
-    @PutMapping("/users/create")
-    public ResponseEntity<User> createUser(@RequestBody UserDto userDto) {
-        User user = adminService.createUser(userDto);
+    @PostMapping("/users/create")
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        User newUser = adminService.createUser(user);
 
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(newUser);
     }
 
     @DeleteMapping("/users/{id}")
@@ -66,20 +63,21 @@ public class AdminUserControllerV1 {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/users/set/{userId}/{roleName}")
+    @PostMapping("/users/set/{userId}/{roleId}")
     public ResponseEntity<?> setRoleForUser(@PathVariable Long userId,
-                                            @PathVariable String roleName) {
-        adminService.setRoleForUser(userId, roleName);
+                                            @PathVariable Long roleId) {
+        adminService.setRole(userId, roleId);
 
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PostMapping("/users/set/{userID}/{eventId}")
-    public ResponseEntity<?> setEventForUser(@PathVariable Long userId,
-                                             @PathVariable Long eventId) {
-        adminService.setEventForUser(userId, eventId);
+    @GetMapping("/roles")
+    public ResponseEntity<?> allRoles() {
+        List<Role> roles = adminService.allRoles();
+        if (roles == null) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
-        return ResponseEntity.ok(HttpStatus.OK);
+        List<RoleDto> roleDtos = roles.stream().map(RoleDto::fromRole).collect(Collectors.toList());
+        return ResponseEntity.ok(roleDtos);
     }
 
     @GetMapping("/events")
@@ -128,7 +126,7 @@ public class AdminUserControllerV1 {
 
     @GetMapping("/files")
     public ResponseEntity<?> allFiles() {
-        List<File> fileList = fileRepository.findAll();
+        List<File> fileList = adminService.allFiles();
         if (fileList == null) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
         return ResponseEntity.ok(fileList);

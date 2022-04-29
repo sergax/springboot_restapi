@@ -5,7 +5,6 @@ import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.File;
 import com.sergax.springboot_restapi.service.UserServise;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -18,11 +18,6 @@ repositories {
     mavenCentral()
 }
 
-jar {
-    baseName("springboot_restapi")
-    version("0.0.1")
-}
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
@@ -33,9 +28,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     runtimeOnly 'mysql:mysql-connector-java'
-	implementation 'org.flywaydb:flyway-core:8.4.4'
-	implementation 'org.flywaydb:flyway-mysql:8.4.4'
-	implementation 'com.amazonaws:aws-java-sdk:1.11.805'
+    implementation 'org.flywaydb:flyway-core:8.4.4'
+    implementation 'org.flywaydb:flyway-mysql:8.4.4'
+    implementation 'com.amazonaws:aws-java-sdk:1.11.805'
     implementation 'software.amazon.awssdk:s3:2.16.39'
     implementation 'io.jsonwebtoken:jjwt:0.2'
 }
@@ -43,6 +38,3 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
-//systemProperty('aws.accessKeyId', 'AKIAZLECZNGC32SFVC4E')
-//systemProperty('aws.secretAccessKey', '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')
