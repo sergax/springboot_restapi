@@ -1,9 +1,6 @@
 package com.sergax.springboot_restapi.service.impl;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.PutObjectResult;
-import com.amazonaws.services.s3.model.S3Object;
+
 import com.sergax.springboot_restapi.config.AWSClientConfig;
 import com.sergax.springboot_restapi.service.AWSService;
 import lombok.AllArgsConstructor;
@@ -34,27 +31,27 @@ import java.util.Optional;
 @Slf4j
 @AllArgsConstructor
 public class AWSServiceImpl implements AWSService {
-    private final AmazonS3 amazonS3;
-
-    @Override
-    public S3Object upload(String bucketName, String path) {
-        File file = new File(path);
-
-        PutObjectResult putObjectResult = amazonS3.putObject(
-                bucketName,
-                file.getName(),
-                file);
-        return getS3Object(bucketName, file.getName());
-    }
-
-    @Override
-    public ObjectListing fileList(String bucketName) {
-        return amazonS3.listObjects(bucketName);
-    }
-
-    @Override
-    public S3Object getS3Object(String bucketName, String key) {
-        return amazonS3.getObject(bucketName, key);
-    }
+//    private final AmazonS3 amazonS3;
+//
+//    @Override
+//    public S3Object upload(String bucketName, String location) {
+//        File file = new File(location);
+//
+//        PutObjectResult putObjectResult = amazonS3.putObject(
+//                bucketName,
+//                file.getName(),
+//                file);
+//        return getS3Object(bucketName, file.getName());
+//    }
+//
+//    @Override
+//    public ObjectListing fileList(String bucketName) {
+//        return amazonS3.listObjects(bucketName);
+//    }
+//
+//    @Override
+//    public S3Object getS3Object(String bucketName, String key) {
+//        return amazonS3.getObject(bucketName, key);
+//    }
 }
 

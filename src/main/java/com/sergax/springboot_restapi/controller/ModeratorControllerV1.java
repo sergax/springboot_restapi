@@ -1,12 +1,21 @@
 package com.sergax.springboot_restapi.controller;
 
+import com.sergax.springboot_restapi.dto.EventDto;
+import com.sergax.springboot_restapi.dto.FileDto;
+import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.File;
 import com.sergax.springboot_restapi.service.ModeratorService;
+import com.sergax.springboot_restapi.service.bucket.BucketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import software.amazon.awssdk.services.s3.S3Client;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * by Aksenchenko Serhii on 27.04.2022
@@ -18,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ModeratorControllerV1 {
     private final ModeratorService moderatorService;
+    private final BucketService bucketService;
 
     @PostMapping("/files/set/{userId}/{fileId}")
     public ResponseEntity<?> setFileForUser(@PathVariable Long userId,
@@ -27,13 +37,23 @@ public class ModeratorControllerV1 {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PutMapping("/files/upload/{userId}/{bucket}/{filePath}")
-    public ResponseEntity<?> uploadFile(@PathVariable Long userId,
-                                        @PathVariable String bucket,
-                                        @PathVariable String path) {
-        File file = moderatorService.upload(userId, bucket, path);
+//    @PutMapping("/files/upload/{userId}/{bucketName}/{location}")
+//    public ResponseEntity<?> uploadFile(@PathVariable Long userId,
+//                                        @PathVariable String bucketName,
+//                                        @PathVariable String location) {
+//        File file = moderatorService.upload(userId, bucketName, location);
+//
+//        return ResponseEntity.ok("File uploaded : " + file);
+//    }
 
-        return ResponseEntity.ok(file);
+    @PutMapping("/files/upload")
+    public ResponseEntity<?> uploadFile() {
+        try {
+            bucketService.putObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok("File uploaded ");
     }
 
     @DeleteMapping("/files/{id}")
@@ -41,5 +61,31 @@ public class ModeratorControllerV1 {
         moderatorService.deleteFileById(fileId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/files/create")
+    public ResponseEntity<?> createFile(@RequestBody File file) {
+        moderatorService.createFile(file);
+
+        return ResponseEntity.ok(file);
+    }
+
+    @GetMapping("/files")
+    public ResponseEntity<?> allFiles() {
+        List<File> fileList = moderatorService.allFiles();
+        if (fileList == null) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        return ResponseEntity.ok(fileList);
+    }
+
+    @GetMapping("/events")
+    public ResponseEntity<?> allEvents() {
+        List<Event> events = moderatorService.allEvents();
+        if (events == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        List<EventDto> eventDtoList = events.stream().map(EventDto::fromEvent).collect(Collectors.toList());
+        return ResponseEntity.ok(eventDtoList);
     }
 }

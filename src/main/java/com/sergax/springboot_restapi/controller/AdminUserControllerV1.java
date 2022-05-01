@@ -112,7 +112,7 @@ public class AdminUserControllerV1 {
     public ResponseEntity<?> uploadFile(@PathVariable Long userId,
                                         @PathVariable String bucket,
                                         @PathVariable String filePath) {
-        moderatorControllerV1.uploadFile(userId, bucket, filePath);
+//        moderatorControllerV1.uploadFile(userId, bucket, filePath);
 
         return ResponseEntity.ok(HttpStatus.OK);
     }
