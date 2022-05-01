@@ -12,39 +12,6 @@ services:
       - MYSQL_PASSWORD=test
       - MYSQL_DATABASE=database
 
-#  app:
-#    build:
-#      dockerfile: ./Dockerfile
-#      context: .
-#    container_name: java-app
-#    ports:
-#      - 8080:8080
-#    depends_on:
-#      - mysql
-
-#version: "3"
-#services:
-#  mysqldb:
-#    image: mysql:8
-##    networks:
-##      - 31ff38141467
-#    environment:
-#      - MYSQL_ROOT_PASSWORD=Aks-662828
-#      - MYSQL_DATABASE=springboot_restapi
-#      - MYSQL_USER=user
-#      - MYSQL_PASSWORD=Aks-662828
-#
-#  app:
-#    image: app
-#    ports:
-#      - "8080:8080"
-##    networks:
-##      - rest-mysql
-##    environment:
-##     SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/springboot_restapi
-#    depends_on:
-#    - mysqldb
-
 
 
 

@@ -47,13 +47,13 @@ public class ModeratorControllerV1 {
 //    }
 
     @PutMapping("/files/upload")
-    public ResponseEntity<?> uploadFile() {
+    public ResponseEntity<?> uploadFile(@RequestBody File file) {
         try {
-            bucketService.putObject();
+            bucketService.putObject(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return ResponseEntity.ok("File uploaded ");
+        return ResponseEntity.ok("File uploaded" + file.getFileName());
     }
 
     @DeleteMapping("/files/{id}")

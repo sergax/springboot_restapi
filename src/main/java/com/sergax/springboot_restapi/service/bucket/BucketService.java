@@ -1,6 +1,7 @@
 package com.sergax.springboot_restapi.service.bucket;
 
 import com.sergax.springboot_restapi.config.DemoConfig;
+import com.sergax.springboot_restapi.model.File;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,7 @@ public class BucketService {
         String remotefilename = "/" + fileName
                 + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH_mm_ss"))
                 + ".txt";
-        putObject();
+//        putObject();
 
         ListObjectsResponse objects = s3Client.listObjects(
                 ListObjectsRequest.builder()
@@ -79,16 +80,16 @@ public class BucketService {
     }
 
 
-    public void putObject() throws IOException {
+    public void putObject(File file) throws IOException {
         S3Client s3Client = gimmeClient();
         BucketService.class
-                .getResourceAsStream("/myfile.txt");
+                .getResourceAsStream(file.getFileName());
         s3Client.putObject(PutObjectRequest
                         .builder()
                         .bucket(config.getBucketName())
-                        .key("/myfile.txt")
+                        .key(file.getFileName())
                         .build(),
-                RequestBody.fromString("/myfile.txt")
+                RequestBody.fromString(file.getFileName())
         );
     }
 }
