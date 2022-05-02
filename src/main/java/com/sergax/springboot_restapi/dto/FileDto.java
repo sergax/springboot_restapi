@@ -7,7 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,21 +22,18 @@ public class FileDto {
     private Long id;
     private String fileName;
     private String location;
-
-    public File toEntity() {
-        File file = new File();
-        file.setId(id);
-        file.setFileName(fileName);
-        file.setLocation(location);
-
-        return file;
-    }
+    private String type;
+    private LocalDateTime lastModified;
+    private Float size;
 
     public static FileDto fromFile(File file) {
         FileDto fileDto = new FileDto();
         fileDto.setId(file.getId());
         fileDto.setFileName(file.getFileName());
-        fileDto.setLocation(fileDto.getLocation());
+        fileDto.setLocation(file.getLocation());
+        fileDto.setType(file.getType());
+        fileDto.setLastModified(file.getLastModified());
+        fileDto.setSize(file.getSize());
 
         return fileDto;
     }

@@ -25,9 +25,5 @@ public interface AdminService {
 
     List<Event> allEvents();
 
-    List<File> allFiles();
-
-    void setRole(Long userId, Long roleId);
-
     List<Role> allRoles();
 }

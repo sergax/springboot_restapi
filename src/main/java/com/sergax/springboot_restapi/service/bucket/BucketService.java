@@ -1,12 +1,11 @@
 package com.sergax.springboot_restapi.service.bucket;
 
-import com.sergax.springboot_restapi.config.DemoConfig;
+import com.sergax.springboot_restapi.config.S3ClientConfig;
 import com.sergax.springboot_restapi.model.File;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
@@ -14,9 +13,6 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * by Aksenchenko Serhii on 01.05.2022
@@ -26,10 +22,9 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 @Slf4j
 public class BucketService {
-    private final DemoConfig config;
+    private final S3ClientConfig config;
 
     public S3Client gimmeClient() {
-
         Region region = Region.EU_CENTRAL_1;
         return S3Client.builder()
                 .region(region)
@@ -44,52 +39,40 @@ public class BucketService {
                 .build();
     }
 
-
-    public void createListDeleteObject(String fileName) throws IOException {
+    public ListObjectsResponse listBucketContent() {
         S3Client s3Client = gimmeClient();
-        String remotefilename = "/" + fileName
-                + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH_mm_ss"))
-                + ".txt";
-//        putObject();
+        ListObjectsResponse response = s3Client.listObjects(ListObjectsRequest
+                .builder()
+                .bucket(config.getBucketName())
+                .build());
 
-        ListObjectsResponse objects = s3Client.listObjects(
-                ListObjectsRequest.builder()
-                        .prefix("/")
-                        .bucket(config.getBucketName())
-                        .build()
-        );
-        objects.contents().forEach(o -> {
-                    System.out.println(o);
-                    s3Client.deleteObject(DeleteObjectRequest.builder()
-                            .bucket(config.getBucketName())
-                            .key(o.key())
-                            .build());
-                }
-        );
+        response.contents().forEach(c ->
+                log.info("Bucket object: {}", c.key()));
 
-        s3Client.close();
+        return response;
     }
 
-    public void deleteObject(String key) {
+    public void deleteObject(String fileName) {
         S3Client s3Client = gimmeClient();
         s3Client.deleteObject(DeleteObjectRequest.builder()
                 .bucket(config.getBucketName())
-                .key(key)
+                .key(fileName)
                 .build());
+
         s3Client.close();
     }
 
 
     public void putObject(File file) throws IOException {
         S3Client s3Client = gimmeClient();
-        BucketService.class
-                .getResourceAsStream(file.getFileName());
+        java.io.File newFile = new java.io.File(file.getLocation());
         s3Client.putObject(PutObjectRequest
                         .builder()
                         .bucket(config.getBucketName())
                         .key(file.getFileName())
                         .build(),
-                RequestBody.fromString(file.getFileName())
-        );
+                RequestBody.fromFile(newFile));
+
+        s3Client.close();
     }
 }

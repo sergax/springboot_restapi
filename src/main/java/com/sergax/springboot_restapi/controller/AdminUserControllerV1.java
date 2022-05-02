@@ -8,8 +8,9 @@ import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.File;
 import com.sergax.springboot_restapi.model.Role;
 import com.sergax.springboot_restapi.model.User;
-import com.sergax.springboot_restapi.repository.RoleRepository;
 import com.sergax.springboot_restapi.service.AdminService;
+import com.sergax.springboot_restapi.service.ModeratorService;
+import com.sergax.springboot_restapi.service.bucket.BucketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdminUserControllerV1 {
     private final AdminService adminService;
-    private final ModeratorControllerV1 moderatorControllerV1;
+    private final ModeratorService moderatorService;
+    private final BucketService bucketService;
 
     @GetMapping("/users")
     public ResponseEntity<?> allUsers() {
@@ -63,14 +65,6 @@ public class AdminUserControllerV1 {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/users/set/{userId}/{roleId}")
-    public ResponseEntity<?> setRoleForUser(@PathVariable Long userId,
-                                            @PathVariable Long roleId) {
-        adminService.setRole(userId, roleId);
-
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
-
     @GetMapping("/roles")
     public ResponseEntity<?> allRoles() {
         List<Role> roles = adminService.allRoles();
@@ -103,30 +97,28 @@ public class AdminUserControllerV1 {
     @PostMapping("/files/set/{userId}/{fileId}")
     public ResponseEntity<?> setFileToUser(@PathVariable Long userId,
                                            @PathVariable Long fileId) {
-        moderatorControllerV1.setFileForUser(userId, fileId);
+        moderatorService.setFileFoUser(userId, fileId);
 
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PutMapping("/files/upload/{userId}/{bucket}/{filePath}")
-    public ResponseEntity<?> uploadFile(@PathVariable Long userId,
-                                        @PathVariable String bucket,
-                                        @PathVariable String filePath) {
-//        moderatorControllerV1.uploadFile(userId, bucket, filePath);
+    @PutMapping("/files/upload")
+    public ResponseEntity<?> uploadFile(@RequestBody File file) {
+        moderatorService.uploadFile(file);
 
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping("/files/delete/{id}")
-    public ResponseEntity<?> deleteFileById(@PathVariable Long id) {
-        moderatorControllerV1.deleteFile(id);
+    @DeleteMapping("/files/delete/{fileName}")
+    public ResponseEntity<?> deleteFileById(@PathVariable String fileName) {
+        bucketService.deleteObject(fileName);
 
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/files")
     public ResponseEntity<?> allFiles() {
-        List<File> fileList = adminService.allFiles();
+        List<File> fileList = moderatorService.allFiles();
         if (fileList == null) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
         return ResponseEntity.ok(fileList);

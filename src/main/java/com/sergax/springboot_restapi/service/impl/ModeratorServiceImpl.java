@@ -1,23 +1,23 @@
 package com.sergax.springboot_restapi.service.impl;
 
-import com.sergax.springboot_restapi.config.AWSClientConfig;
-import com.sergax.springboot_restapi.model.Event;
-import com.sergax.springboot_restapi.properties.AWSS3Properties;
 import com.sergax.springboot_restapi.exception.UserNotFoundException;
 import com.sergax.springboot_restapi.model.File;
 import com.sergax.springboot_restapi.model.User;
-import com.sergax.springboot_restapi.repository.EventRepository;
 import com.sergax.springboot_restapi.repository.FileRepository;
 import com.sergax.springboot_restapi.repository.UserRepository;
-import com.sergax.springboot_restapi.service.AWSService;
 import com.sergax.springboot_restapi.service.EventService;
 import com.sergax.springboot_restapi.service.ModeratorService;
+import com.sergax.springboot_restapi.service.bucket.BucketService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -31,34 +31,12 @@ public class ModeratorServiceImpl implements ModeratorService {
     private final FileRepository fileRepository;
     private final UserRepository userRepository;
     private final EventService eventService;
-    private final EventRepository eventRepository;
-    private final AWSService awsService;
-    private final AWSClientConfig awsClientConfig;
-    private final AWSS3Properties properties;
-//    private final AmazonS3 amazonS3;
+    private final BucketService bucketService;
 
-    //    @Override
-    public File upload(Long userID, String location) {
-//        S3Object s3Object = awsService.upload(bucketName, location);
-//
-//        File file = new File();
-//        file.setFileName(s3Object.getKey());
-//        file.setLocation(s3Object.getBucketName());
-//
-//        User user = userRepository.findUserById(userID);
-//
-//        eventService.createEvent(user, file, "Set File ID : " + file.getId() +
-//                " to User ID : " + user.getId());
-//
-//        log.info("File : {} was uploaded", file.getFileName());
-//
-//        return file;
-        return new File();
-    }
 
     @SneakyThrows
     @Override
-    public void setFile(Long userId, Long fileId) {
+    public void setFileFoUser(Long userId, Long fileId) {
         File file = fileRepository.getById(fileId);
         if (file == null) throw new FileNotFoundException("Couldn't found File by ID : " + fileId);
 
@@ -70,26 +48,28 @@ public class ModeratorServiceImpl implements ModeratorService {
                         " to User ID : " + userId);
     }
 
+    @SneakyThrows
     @Override
-    public void deleteFileById(Long id) {
-        fileRepository.deleteById(id);
+    public File uploadFile(File file) {
+        bucketService.putObject(file);
+
+        file.setFileName(file.getFileName());
+        file.setLocation(file.getLocation());
+        file.setLastModified(LocalDateTime.now());
+        file.setType(Files.probeContentType(Paths.get(file.getLocation())));
+        file.setSize((float) Files.size(Paths.get(file.getLocation())));
+        fileRepository.save(file);
+
+        return file;
     }
 
-    @Override
-    public File createFile(File file) {
-        File newFile = fileRepository.save(file);
-        log.info("File was created : {}", file);
-
-        return newFile;
-    }
-
-    @Override
-    public List<Event> allEvents() {
-        return eventRepository.findAll();
-    }
-
+    @SneakyThrows
     @Override
     public List<File> allFiles() {
-        return fileRepository.findAll();
+        List<File> fileList = fileRepository.findAll();
+        if(fileList == null) throw new FileNotFoundException("Wasn't found any Files 😑");
+        log.info("All Files : {}", fileList);
+
+        return fileList;
     }
 }

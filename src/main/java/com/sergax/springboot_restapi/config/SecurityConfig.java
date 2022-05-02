@@ -13,15 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 /**
  * by Aksenchenko Serhii on 19.04.2022
  */
-/*
-{
-    "login":"serg",
-    "password":"$2a$12$Br824VtL/p0jFCs5BLxek.C74.T4XDMIPF6FDtVqRMEZvGzBh2xoy",
-    "firstName":"Sergey",
-    "lastName":"Sergeev",
-    "email":"s.sergeev@mail.ru"
-}
- */
+
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {

@@ -1,8 +1,6 @@
 package com.sergax.springboot_restapi.service.impl;
 
-import com.sergax.springboot_restapi.dto.UserDto;
 import com.sergax.springboot_restapi.model.Event;
-import com.sergax.springboot_restapi.model.File;
 import com.sergax.springboot_restapi.model.Role;
 import com.sergax.springboot_restapi.model.User;
 import com.sergax.springboot_restapi.repository.EventRepository;
@@ -57,20 +55,6 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<Event> allEvents() {
         return eventRepository.findAll();
-    }
-
-    @Override
-    public List<File> allFiles() {
-        return fileRepository.findAll();
-    }
-
-    @Override
-    public void setRole(Long userId, Long roleId) {
-        User user = userRepository.findUserById(userId);
-        Role role = roleRepository.findRoleById(roleId);
-
-        user.getRoles().add(role);
-        userRepository.save(user);
     }
 
     @Override

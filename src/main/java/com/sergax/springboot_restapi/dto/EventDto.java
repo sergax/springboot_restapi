@@ -1,15 +1,7 @@
 package com.sergax.springboot_restapi.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sergax.springboot_restapi.model.Event;
-import com.sergax.springboot_restapi.model.File;
-import com.sergax.springboot_restapi.model.User;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * by Aksenchenko Serhii on 19.04.2022
@@ -22,8 +14,8 @@ public class EventDto {
     private String eventName;
     private String firstName;
     private String lastName;
-    private Long fileId;
-    private String fileName;
+
+    private FileDto fileDto;
 
     public static EventDto fromEvent(Event event) {
         EventDto eventDto = new EventDto();
@@ -32,8 +24,9 @@ public class EventDto {
         eventDto.setEventName(event.getEventName());
         eventDto.setFirstName(event.getUsers().getFirstName());
         eventDto.setLastName(event.getUsers().getLastName());
-        eventDto.setFileId(event.getFiles().getId());
-        eventDto.setFileName(event.getFiles().getFileName());
+
+        eventDto.setFileDto(FileDto.fromFile(event.getFiles()));
+
         return eventDto;
     }
 }
