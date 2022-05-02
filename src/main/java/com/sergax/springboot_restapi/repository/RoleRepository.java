@@ -10,5 +10,4 @@ import java.util.List;
  * by Aksenchenko Serhii on 18.04.2022
  */
 public interface RoleRepository extends JpaRepository<Role, Long> {
-    Role findRoleById(Long roleId);
 }

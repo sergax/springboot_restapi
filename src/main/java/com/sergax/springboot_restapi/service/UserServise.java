@@ -14,8 +14,10 @@ public interface UserServise {
     User getByLogin(String login);
 
     File getFileById(Long id);
+
     List<File> allFiles();
 
     Event getEventById(Long id);
+
     List<Event> allEvents();
 }
