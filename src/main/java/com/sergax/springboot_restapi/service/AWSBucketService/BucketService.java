@@ -1,4 +1,4 @@
-package com.sergax.springboot_restapi.service.bucket;
+package com.sergax.springboot_restapi.service.AWSBucketService;
 
 import com.sergax.springboot_restapi.config.S3ClientConfig;
 import com.sergax.springboot_restapi.model.File;

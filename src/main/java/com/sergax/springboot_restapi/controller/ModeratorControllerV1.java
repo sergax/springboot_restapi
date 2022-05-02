@@ -1,12 +1,11 @@
 package com.sergax.springboot_restapi.controller;
 
 import com.sergax.springboot_restapi.dto.EventDto;
-import com.sergax.springboot_restapi.dto.FileDto;
 import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.File;
-import com.sergax.springboot_restapi.service.EventService;
 import com.sergax.springboot_restapi.service.ModeratorService;
-import com.sergax.springboot_restapi.service.bucket.BucketService;
+import com.sergax.springboot_restapi.service.UserServise;
+import com.sergax.springboot_restapi.service.AWSBucketService.BucketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ModeratorControllerV1 {
     private final ModeratorService moderatorService;
-    private final EventService eventService;
+    private final UserServise userServise;
     private final BucketService bucketService;
 
     @PostMapping("/files/set/{userId}/{fileId}")
@@ -62,7 +61,7 @@ public class ModeratorControllerV1 {
         return ResponseEntity.ok(fileList);
     }
 
-    @GetMapping("/files/bucket")
+    @GetMapping("/files/AWSBucketService")
     public ResponseEntity<?> allFilesInBucket() {
         ListObjectsResponse fileList = bucketService.listBucketContent();
         if (fileList == null) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -72,7 +71,7 @@ public class ModeratorControllerV1 {
 
     @GetMapping("/events")
     public ResponseEntity<?> allEvents() {
-        List<Event> events = eventService.allEvents();
+        List<Event> events = userServise.allEvents();
         if (events == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

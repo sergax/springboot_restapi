@@ -1,6 +1,7 @@
 package com.sergax.springboot_restapi.service;
 
 import com.sergax.springboot_restapi.model.File;
+import com.sergax.springboot_restapi.model.User;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface ModeratorService {
     File uploadFile(File file);
 
     List<File> allFiles();
+
+    void createEvent(User user, File file, String eventName);
 }

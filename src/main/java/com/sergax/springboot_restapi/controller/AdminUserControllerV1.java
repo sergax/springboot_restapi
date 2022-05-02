@@ -10,7 +10,7 @@ import com.sergax.springboot_restapi.model.Role;
 import com.sergax.springboot_restapi.model.User;
 import com.sergax.springboot_restapi.service.AdminService;
 import com.sergax.springboot_restapi.service.ModeratorService;
-import com.sergax.springboot_restapi.service.bucket.BucketService;
+import com.sergax.springboot_restapi.service.AWSBucketService.BucketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
