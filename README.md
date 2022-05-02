@@ -1,5 +1,4 @@
-# springboot_restapi
-Plain project Rest Api
+[![CodeFactor](https://www.codefactor.io/repository/github/sergax/springboot_restapi/badge)](https://www.codefactor.io/repository/github/sergax/springboot_restapi)
 
 # Практика:
 
