@@ -109,7 +109,7 @@ public class AdminUserControllerV1 {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping("/files/delete/{fileName}")
+    @DeleteMapping("/files/{fileName}")
     public ResponseEntity<?> deleteFileById(@PathVariable String fileName) {
         bucketService.deleteObject(fileName);
 

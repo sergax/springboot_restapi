@@ -46,7 +46,7 @@ public class ModeratorControllerV1 {
         return ResponseEntity.ok("File uploaded : " + file);
     }
 
-    @DeleteMapping("/files/{id}")
+    @DeleteMapping("/files/{fileName}")
     public ResponseEntity<?> deleteFile(@PathVariable String fileName) {
         bucketService.deleteObject(fileName);
 
@@ -61,7 +61,7 @@ public class ModeratorControllerV1 {
         return ResponseEntity.ok(fileList);
     }
 
-    @GetMapping("/files/AWSBucketService")
+    @GetMapping("/files/buckets")
     public ResponseEntity<?> allFilesInBucket() {
         ListObjectsResponse fileList = bucketService.listBucketContent();
         if (fileList == null) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
