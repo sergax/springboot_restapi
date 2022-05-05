@@ -1,5 +1,4 @@
-# springboot_restapi
-Plain project Rest Api
+[![CodeFactor](https://www.codefactor.io/repository/github/sergax/springboot_restapi/badge)](https://www.codefactor.io/repository/github/sergax/springboot_restapi)
 
 # Практика:
 
@@ -15,7 +14,7 @@ Plain project Rest Api
   
 Взаимодействие с S3 должно быть реализовано с помощью AWS SDK.
 
-**Уровни доступа:**
+# Уровни доступа:
   
 ADMIN - полный доступ к приложению
   
@@ -23,4 +22,4 @@ MODERATOR - добавление и удаление файлов
   
 USER - только чтение всех данных, кроме User
 
-*Технологии: Java, MySQL, Spring (IoC, Data, Sercurity), AWS SDK, MySQL, Docker, JUnit, Mockito, Gradle.*
+**Технологии: Java, MySQL, Spring (IoC, Data, Sercurity), AWS SDK, MySQL, Docker, JUnit, Mockito, Gradle.**
