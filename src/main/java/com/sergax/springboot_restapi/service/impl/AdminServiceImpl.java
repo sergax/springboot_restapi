@@ -24,17 +24,22 @@ import java.util.List;
 public class AdminServiceImpl implements AdminService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
-    private final FileRepository fileRepository;
     private final RoleRepository roleRepository;
 
     @Override
     public User getUserById(Long id) {
-        return userRepository.findUserById(id);
+        User user = userRepository.findUserById(id);
+
+        log.info("User by ID : {}", user);
+        return user;
     }
 
     @Override
     public User createUser(User user) {
-        return userRepository.save(user);
+        User newUser = userRepository.save(user);
+
+        log.info("Created new User : {}", newUser);
+        return newUser;
     }
 
     @Override
@@ -44,21 +49,33 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<User> allUsers() {
-        return userRepository.findAll();
+        List<User> listUsers = userRepository.findAll();
+
+        log.info("All Users : {}", listUsers);
+        return listUsers;
     }
 
     @Override
     public Event getEventById(Long eventId) {
-        return eventRepository.getById(eventId);
+        Event event = eventRepository.getById(eventId);
+
+        log.info("Event by ID : {}", event);
+        return event;
     }
 
     @Override
     public List<Event> allEvents() {
-        return eventRepository.findAll();
+        List<Event> eventList = eventRepository.findAll();
+
+        log.info("All Events : {}", eventList);
+        return eventList;
     }
 
     @Override
     public List<Role> allRoles() {
-        return roleRepository.findAll();
+        List<Role> roleList = roleRepository.findAll();
+
+        log.info("All Roles : {}", roleList);
+        return roleList;
     }
 }
