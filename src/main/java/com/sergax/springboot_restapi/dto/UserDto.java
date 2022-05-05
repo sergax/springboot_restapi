@@ -12,6 +12,8 @@ import java.util.List;
  * by Aksenchenko Serhii on 19.04.2022
  */
 
+// instead DTO we could use DozerBeanMapper
+
 @Data
 public class UserDto {
     private Long id;
