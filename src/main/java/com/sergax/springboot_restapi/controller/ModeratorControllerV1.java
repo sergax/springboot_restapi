@@ -3,6 +3,7 @@ package com.sergax.springboot_restapi.controller;
 import com.sergax.springboot_restapi.dto.EventDto;
 import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.File;
+import com.sergax.springboot_restapi.model.Role;
 import com.sergax.springboot_restapi.service.ModeratorService;
 import com.sergax.springboot_restapi.service.UserServise;
 import com.sergax.springboot_restapi.service.AWSBucketService.BucketService;
@@ -24,7 +25,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/moderator/")
-@PreAuthorize("hasAnyRole('MODER','ADMIN')")
 @RequiredArgsConstructor
 public class ModeratorControllerV1 {
     private final ModeratorService moderatorService;
@@ -78,5 +78,13 @@ public class ModeratorControllerV1 {
 
         List<EventDto> eventDtoList = events.stream().map(EventDto::fromEvent).collect(Collectors.toList());
         return ResponseEntity.ok(eventDtoList);
+    }
+
+    @PutMapping("/users/roles/{userId}/{roleId}")
+    public ResponseEntity<?> setUserForRole(@PathVariable Long userId,
+                                            @PathVariable Long roleId) {
+        moderatorService.setUserForRole(userId, roleId);
+
+        return ResponseEntity.noContent().build();
     }
 }

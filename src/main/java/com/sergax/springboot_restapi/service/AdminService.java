@@ -17,6 +17,8 @@ public interface AdminService {
 
     User createUser(User user);
 
+    User updateUser(Long userId, User user);
+
     void deleteUser(Long id);
 
     List<User> allUsers();

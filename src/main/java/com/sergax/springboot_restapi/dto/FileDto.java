@@ -1,23 +1,23 @@
 package com.sergax.springboot_restapi.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.sergax.springboot_restapi.model.Event;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sergax.springboot_restapi.model.File;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * by Aksenchenko Serhii on 19.04.2022
  */
 
+@AllArgsConstructor
+@Builder
 @Data
+@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FileDto {
     private Long id;
     private String fileName;

@@ -16,6 +16,7 @@ public class RoleDto {
         RoleDto roleDto = new RoleDto();
         roleDto.setId(role.getId());
         roleDto.setRoleName(role.getRoleName());
+
         return roleDto;
     }
 }

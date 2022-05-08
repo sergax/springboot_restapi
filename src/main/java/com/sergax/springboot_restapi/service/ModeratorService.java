@@ -1,6 +1,7 @@
 package com.sergax.springboot_restapi.service;
 
 import com.sergax.springboot_restapi.model.File;
+import com.sergax.springboot_restapi.model.Role;
 import com.sergax.springboot_restapi.model.User;
 
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.List;
 public interface ModeratorService {
 
     void setFileFoUser(Long userId, Long fileId);
+
+    void setUserForRole(Long userId, Long roleId);
 
     File uploadFile(File file);
 

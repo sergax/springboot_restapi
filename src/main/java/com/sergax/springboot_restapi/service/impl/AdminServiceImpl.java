@@ -4,7 +4,6 @@ import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.Role;
 import com.sergax.springboot_restapi.model.User;
 import com.sergax.springboot_restapi.repository.EventRepository;
-import com.sergax.springboot_restapi.repository.FileRepository;
 import com.sergax.springboot_restapi.repository.RoleRepository;
 import com.sergax.springboot_restapi.repository.UserRepository;
 import com.sergax.springboot_restapi.service.*;
@@ -77,5 +76,23 @@ public class AdminServiceImpl implements AdminService {
 
         log.info("All Roles : {}", roleList);
         return roleList;
+    }
+
+    @Override
+    public User updateUser(Long userId, User user) {
+        User updatedUser = userRepository.findById(userId)
+                .map(u -> {
+                    u.setLogin(user.getLogin());
+                    u.setFirstName(user.getFirstName());
+                    u.setLastName(user.getLastName());
+                    return userRepository.save(u);
+                })
+                .orElseGet(() -> {
+                    user.setId(userId);
+                    return userRepository.save(user);
+                });
+
+        log.info("User by ID : {}, was updated", userId);
+        return updatedUser;
     }
 }

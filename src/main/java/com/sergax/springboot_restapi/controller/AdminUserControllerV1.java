@@ -12,10 +12,12 @@ import com.sergax.springboot_restapi.service.AdminService;
 import com.sergax.springboot_restapi.service.ModeratorService;
 import com.sergax.springboot_restapi.service.AWSBucketService.BucketService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.relation.RoleNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,11 +53,19 @@ public class AdminUserControllerV1 {
         return ResponseEntity.ok(UserDto.fromUser(user));
     }
 
-    @PostMapping("/users/create")
+    @PostMapping("/users")
     public ResponseEntity<?> createUser(@RequestBody User user) {
         User newUser = adminService.createUser(user);
 
         return ResponseEntity.ok(newUser);
+    }
+
+    @PutMapping("/users/{userId}")
+    public ResponseEntity<?> updateUser(@RequestBody User user,
+                                        @PathVariable Long userId) {
+        User updatedUser = adminService.updateUser(userId, user);
+
+        return ResponseEntity.ok(UserDto.fromUser(updatedUser));
     }
 
     @DeleteMapping("/users/{id}")
@@ -63,6 +73,21 @@ public class AdminUserControllerV1 {
         adminService.deleteUser(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @SneakyThrows
+    @PutMapping("/users/roles/{userId}/{roleId}")
+    public ResponseEntity<?> setUserForRole(@PathVariable Long userId,
+                                            @PathVariable Long roleId) {
+        if (userId == null) {
+            throw new UserNotFoundException("Couldn't find user by ID : " + userId);
+        }
+        if (roleId == null) {
+            throw new RoleNotFoundException("Couldn't find role by ID : " + roleId);
+        }
+        moderatorService.setUserForRole(userId, roleId);
+
+        return ResponseEntity.ok("User by ID : " + userId + " with Role ID : " + roleId + " was established");
     }
 
     @GetMapping("/roles")
@@ -94,7 +119,7 @@ public class AdminUserControllerV1 {
         return ResponseEntity.ok(EventDto.fromEvent(event));
     }
 
-    @PostMapping("/files/set/{userId}/{fileId}")
+    @PostMapping("/users/files/{userId}/{fileId}")
     public ResponseEntity<?> setFileToUser(@PathVariable Long userId,
                                            @PathVariable Long fileId) {
         moderatorService.setFileFoUser(userId, fileId);

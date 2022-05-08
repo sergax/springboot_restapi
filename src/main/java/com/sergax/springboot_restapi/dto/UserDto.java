@@ -17,7 +17,6 @@ import java.util.List;
 @Data
 public class UserDto {
     private Long id;
-    private String password;
     private String login;
     private String firstName;
     private String lastName;

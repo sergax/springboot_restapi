@@ -32,6 +32,7 @@ dependencies {
     implementation 'org.flywaydb:flyway-mysql:8.4.4'
     implementation'software.amazon.awssdk:s3:2.16.39'
     implementation 'io.jsonwebtoken:jjwt:0.2'
+    implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.4.2.Final'
 }
 
 tasks.named('test') {
