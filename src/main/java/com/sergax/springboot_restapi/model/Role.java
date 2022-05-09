@@ -27,6 +27,8 @@ public class Role {
     @Column(name = "role_name")
     private String roleName;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(
+            mappedBy = "roles",
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     List<User> users;
 }

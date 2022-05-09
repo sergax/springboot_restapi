@@ -39,7 +39,7 @@ public class ModeratorControllerV1 {
     private final FileModelAssembler fileModelAssembler;
     private final EventModelAssembler eventModelAssembler;
 
-    @PostMapping("/files/set/{userId}/{fileId}")
+    @PostMapping("/users/files/{userId}/{fileId}")
     public ResponseEntity<?> setFileForUser(@PathVariable Long userId,
                                             @PathVariable Long fileId) {
         moderatorService.setFileFoUser(userId, fileId);
