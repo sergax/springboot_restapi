@@ -34,7 +34,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 @RequiredArgsConstructor
 public class ModeratorControllerV1 {
     private final ModeratorService moderatorService;
-    private final AdminService adminService;
+    private final UserServise userServise;
     private final BucketService bucketService;
     private final FileModelAssembler fileModelAssembler;
     private final EventModelAssembler eventModelAssembler;
@@ -63,7 +63,7 @@ public class ModeratorControllerV1 {
 
     @GetMapping("/files")
     public CollectionModel<EntityModel<FileDto>> allFiles() {
-        List<EntityModel<FileDto>> fileList = moderatorService.allFiles().stream()
+        List<EntityModel<FileDto>> fileList = userServise.allFiles().stream()
                 .map(fileModelAssembler::toModel)
                 .collect(Collectors.toList());
 
@@ -80,7 +80,7 @@ public class ModeratorControllerV1 {
 
     @GetMapping("/events")
     public CollectionModel<EntityModel<EventDto>> allEvents() {
-        List<EntityModel<EventDto>> events = adminService.allEvents().stream()
+        List<EntityModel<EventDto>> events = userServise.allEvents().stream()
                 .map(eventModelAssembler::toModel)
                 .collect(Collectors.toList());
 

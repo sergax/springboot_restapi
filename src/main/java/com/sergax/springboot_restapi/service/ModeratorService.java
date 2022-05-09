@@ -18,7 +18,5 @@ public interface ModeratorService {
 
     File uploadFile(File file);
 
-    List<FileDto> allFiles();
-
     void createEvent(User user, File file, String eventName);
 }

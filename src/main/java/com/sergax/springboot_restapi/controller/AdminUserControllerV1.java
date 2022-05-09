@@ -4,8 +4,8 @@ import com.sergax.springboot_restapi.dto.EventDto;
 import com.sergax.springboot_restapi.dto.FileDto;
 import com.sergax.springboot_restapi.dto.RoleDto;
 import com.sergax.springboot_restapi.dto.UserDto;
+import com.sergax.springboot_restapi.exception.EventNotFoundException;
 import com.sergax.springboot_restapi.exception.UserNotFoundException;
-import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.File;
 import com.sergax.springboot_restapi.model.Role;
 import com.sergax.springboot_restapi.model.User;
@@ -15,6 +15,7 @@ import com.sergax.springboot_restapi.model.assembler.UserModelAssembler;
 import com.sergax.springboot_restapi.service.AdminService;
 import com.sergax.springboot_restapi.service.ModeratorService;
 import com.sergax.springboot_restapi.service.AWSBucketService.BucketService;
+import com.sergax.springboot_restapi.service.UserServise;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.hateoas.CollectionModel;
@@ -24,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.management.relation.RoleNotFoundException;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +41,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequiredArgsConstructor
 public class AdminUserControllerV1 {
     private final AdminService adminService;
+    private final UserServise userServise;
     private final ModeratorService moderatorService;
     private final BucketService bucketService;
     private final FileModelAssembler fileModelAssembler;
@@ -51,17 +54,16 @@ public class AdminUserControllerV1 {
                 .map(userModelAssembler::toModel)
                 .collect(Collectors.toList());
 
-//        List<UserDto> userDtoList = user.stream().map(UserDto::fromUser).collect(Collectors.toList());
         return CollectionModel.of(users, linkTo(methodOn(AdminUserControllerV1.class).allUsers()).withSelfRel());
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<?> oneUserById(@PathVariable Long id) {
-        User user = adminService.getUserById(id);
+    public EntityModel<UserDto> oneUserById(@PathVariable Long id) {
+        UserDto user = adminService.getUserById(id);
         if (user == null) {
             throw new UserNotFoundException(id);
         }
-        return ResponseEntity.ok(UserDto.fromUser(user));
+        return userModelAssembler.toModel(user);
     }
 
     @PostMapping("/users")
@@ -112,7 +114,7 @@ public class AdminUserControllerV1 {
 
     @GetMapping("/events")
     public CollectionModel<EntityModel<EventDto>> allEvents() {
-        List<EntityModel<EventDto>> events = adminService.allEvents().stream()
+        List<EntityModel<EventDto>> events = userServise.allEvents().stream()
                 .map(eventModelAssembler::toModel)
                 .collect(Collectors.toList());
 
@@ -120,12 +122,11 @@ public class AdminUserControllerV1 {
     }
 
     @GetMapping("/events/{id}")
-    public ResponseEntity<?> oneEventById(@PathVariable Long id) {
-        Event event = adminService.getEventById(id);
-        if (event == null) {
-            throw new UserNotFoundException(id);
-        }
-        return ResponseEntity.ok(EventDto.fromEvent(event));
+    public EntityModel<EventDto> getEventById(@PathVariable Long id) {
+        EventDto event = userServise.getEventById(id);
+        if (event == null) throw new EventNotFoundException(id);
+
+        return eventModelAssembler.toModel(event);
     }
 
     @PostMapping("/users/files/{userId}/{fileId}")
@@ -152,10 +153,19 @@ public class AdminUserControllerV1 {
 
     @GetMapping("/files")
     public CollectionModel<EntityModel<FileDto>> allFiles() {
-        List<EntityModel<FileDto>> fileList = moderatorService.allFiles().stream()
+        List<EntityModel<FileDto>> fileList = userServise.allFiles().stream()
                 .map(fileModelAssembler::toModel)
                 .collect(Collectors.toList());
 
         return CollectionModel.of(fileList, linkTo(methodOn(ModeratorControllerV1.class).allFiles()).withSelfRel());
+    }
+
+    @SneakyThrows
+    @GetMapping("/files/{id}")
+    public EntityModel<FileDto> getFileById(@PathVariable Long id) {
+        FileDto file = userServise.getFileById(id);
+        if (file == null) throw new FileNotFoundException();
+
+        return fileModelAssembler.toModel(file);
     }
 }

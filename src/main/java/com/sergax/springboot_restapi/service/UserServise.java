@@ -1,5 +1,7 @@
 package com.sergax.springboot_restapi.service;
 
+import com.sergax.springboot_restapi.dto.EventDto;
+import com.sergax.springboot_restapi.dto.FileDto;
 import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.File;
 import com.sergax.springboot_restapi.model.User;
@@ -13,11 +15,11 @@ import java.util.List;
 public interface UserServise {
     User getByLogin(String login);
 
-    File getFileById(Long id);
+    FileDto getFileById(Long id);
 
-    List<File> allFiles();
+    List<FileDto> allFiles();
 
-    Event getEventById(Long id);
+    EventDto getEventById(Long id);
 
-    List<Event> allEvents();
+    List<EventDto> allEvents();
 }

@@ -1,8 +1,7 @@
 package com.sergax.springboot_restapi.model.assembler;
 
-import com.sergax.springboot_restapi.controller.ModeratorControllerV1;
+import com.sergax.springboot_restapi.controller.UserControllerV1;
 import com.sergax.springboot_restapi.dto.EventDto;
-import com.sergax.springboot_restapi.model.Event;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
@@ -20,6 +19,7 @@ public class EventModelAssembler implements RepresentationModelAssembler<EventDt
     @Override
     public EntityModel<EventDto> toModel(EventDto entity) {
         return EntityModel.of(entity,
-                linkTo(methodOn(ModeratorControllerV1.class).allEvents()).withRel("Events"));
+                linkTo(methodOn(UserControllerV1.class).getEventById(entity.getId())).withSelfRel(),
+                linkTo(methodOn(UserControllerV1.class).allEvents()).withRel("Events"));
     }
 }

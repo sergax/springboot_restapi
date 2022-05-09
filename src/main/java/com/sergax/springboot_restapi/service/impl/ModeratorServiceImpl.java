@@ -1,6 +1,5 @@
 package com.sergax.springboot_restapi.service.impl;
 
-import com.sergax.springboot_restapi.dto.FileDto;
 import com.sergax.springboot_restapi.exception.UserNotFoundException;
 import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.File;
@@ -23,8 +22,6 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * by Aksenchenko Serhii on 27.04.2022
@@ -68,18 +65,6 @@ public class ModeratorServiceImpl implements ModeratorService {
         fileRepository.save(file);
 
         return file;
-    }
-
-    @SneakyThrows
-    @Override
-    public List<FileDto> allFiles() {
-        List<File> fileList = fileRepository.findAll();
-        List<FileDto> fileDtoList = fileList.stream().map(FileDto::fromFile).collect(Collectors.toList());
-        if (fileList == null) throw new FileNotFoundException("Wasn't found any Files 😑");
-
-        log.info("All Files : {}", fileList);
-
-        return fileDtoList;
     }
 
     @Override

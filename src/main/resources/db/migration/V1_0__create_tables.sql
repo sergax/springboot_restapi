@@ -33,7 +33,7 @@ PRIMARY KEY(id)
 );
 
 CREATE TABLE IF NOT EXISTS user_role (
-user_id INT NOT NULL,
-role_id INT NOT NULL,
-PRIMARY KEY(user_id, role_id)
+user_id INT,
+role_id INT,
+PRIMARY KEY(user_id)
 );

@@ -1,8 +1,6 @@
 package com.sergax.springboot_restapi.service.impl;
 
-import com.sergax.springboot_restapi.dto.EventDto;
 import com.sergax.springboot_restapi.dto.UserDto;
-import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.Role;
 import com.sergax.springboot_restapi.model.User;
 import com.sergax.springboot_restapi.repository.EventRepository;
@@ -29,11 +27,11 @@ public class AdminServiceImpl implements AdminService {
     private final RoleRepository roleRepository;
 
     @Override
-    public User getUserById(Long id) {
+    public UserDto getUserById(Long id) {
         User user = userRepository.findUserById(id);
 
         log.info("User by ID : {}", user);
-        return user;
+        return UserDto.fromUser(user);
     }
 
     @Override
@@ -56,23 +54,6 @@ public class AdminServiceImpl implements AdminService {
 
         log.info("All Users : {}", listUsers);
         return users;
-    }
-
-    @Override
-    public Event getEventById(Long eventId) {
-        Event event = eventRepository.getById(eventId);
-
-        log.info("Event by ID : {}", event);
-        return event;
-    }
-
-    @Override
-    public List<EventDto> allEvents() {
-        List<Event> eventList = eventRepository.findAll();
-        List<EventDto> eventDtoList = eventList.stream().map(EventDto::fromEvent).collect(Collectors.toList());
-
-        log.info("All Events : {}", eventList);
-        return eventDtoList;
     }
 
     @Override

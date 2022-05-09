@@ -1,19 +1,26 @@
 package com.sergax.springboot_restapi.controller;
 
 import com.sergax.springboot_restapi.dto.EventDto;
-import com.sergax.springboot_restapi.model.Event;
-import com.sergax.springboot_restapi.model.File;
+import com.sergax.springboot_restapi.dto.FileDto;
+import com.sergax.springboot_restapi.exception.EventNotFoundException;
+import com.sergax.springboot_restapi.model.assembler.EventModelAssembler;
+import com.sergax.springboot_restapi.model.assembler.FileModelAssembler;
 import com.sergax.springboot_restapi.service.UserServise;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.SneakyThrows;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * by Aksenchenko Serhii on 27.04.2022
@@ -24,37 +31,41 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserControllerV1 {
     private final UserServise userServise;
+    private final FileModelAssembler fileModelAssembler;
+    private final EventModelAssembler eventModelAssembler;
 
+    @SneakyThrows
     @GetMapping("/files/{id}")
-    public ResponseEntity<?> getFileById(@PathVariable Long id) {
-        File file = userServise.getFileById(id);
-        if (file == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public EntityModel<FileDto> getFileById(@PathVariable Long id) {
+        FileDto file = userServise.getFileById(id);
+        if (file == null) throw new FileNotFoundException();
 
-        return ResponseEntity.ok(file);
+        return fileModelAssembler.toModel(file);
     }
 
     @GetMapping("/files")
-    public ResponseEntity<?> allFiles() {
-        List<File> fileList = userServise.allFiles();
-        if (fileList == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public CollectionModel<EntityModel<FileDto>> allFiles() {
+        List<EntityModel<FileDto>> fileList = userServise.allFiles().stream()
+                .map(fileModelAssembler::toModel)
+                .collect(Collectors.toList());
 
-        return ResponseEntity.ok(fileList);
+        return CollectionModel.of(fileList, linkTo(methodOn(ModeratorControllerV1.class).allFiles()).withSelfRel());
     }
 
     @GetMapping("/events/{id}")
-    public ResponseEntity<?> getEventById(@PathVariable Long id) {
-        Event event = userServise.getEventById(id);
-        if (event == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public EntityModel<EventDto> getEventById(@PathVariable Long id) {
+        EventDto event = userServise.getEventById(id);
+        if (event == null) throw new EventNotFoundException(id);
 
-        return ResponseEntity.ok(EventDto.fromEvent(event));
+        return eventModelAssembler.toModel(event);
     }
 
     @GetMapping("/events")
-    public ResponseEntity<?> allEvents() {
-        List<Event> eventList = userServise.allEvents();
-        if (eventList == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public CollectionModel<EntityModel<EventDto>> allEvents() {
+        List<EntityModel<EventDto>> events = userServise.allEvents().stream()
+                .map(eventModelAssembler::toModel)
+                .collect(Collectors.toList());
 
-        List<EventDto> eventDtoList = eventList.stream().map(EventDto::fromEvent).collect(Collectors.toList());
-        return ResponseEntity.ok(eventDtoList);
+        return CollectionModel.of(events, linkTo(methodOn(ModeratorControllerV1.class).allEvents()).withSelfRel());
     }
 }

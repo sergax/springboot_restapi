@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 public interface AdminService {
-    User getUserById(Long id);
+    UserDto getUserById(Long id);
 
     User createUser(User user);
 
@@ -23,10 +23,6 @@ public interface AdminService {
     void deleteUser(Long id);
 
     List<UserDto> allUsers();
-
-    Event getEventById(Long eventId);
-
-    List<EventDto> allEvents();
 
     List<Role> allRoles();
 }
