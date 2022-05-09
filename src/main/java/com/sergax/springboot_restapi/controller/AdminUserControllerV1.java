@@ -1,6 +1,7 @@
 package com.sergax.springboot_restapi.controller;
 
 import com.sergax.springboot_restapi.dto.EventDto;
+import com.sergax.springboot_restapi.dto.FileDto;
 import com.sergax.springboot_restapi.dto.RoleDto;
 import com.sergax.springboot_restapi.dto.UserDto;
 import com.sergax.springboot_restapi.exception.UserNotFoundException;
@@ -8,11 +9,16 @@ import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.File;
 import com.sergax.springboot_restapi.model.Role;
 import com.sergax.springboot_restapi.model.User;
+import com.sergax.springboot_restapi.model.assembler.EventModelAssembler;
+import com.sergax.springboot_restapi.model.assembler.FileModelAssembler;
+import com.sergax.springboot_restapi.model.assembler.UserModelAssembler;
 import com.sergax.springboot_restapi.service.AdminService;
 import com.sergax.springboot_restapi.service.ModeratorService;
 import com.sergax.springboot_restapi.service.AWSBucketService.BucketService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +26,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.management.relation.RoleNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * by Aksenchenko Serhii on 19.04.2022
@@ -32,16 +41,18 @@ public class AdminUserControllerV1 {
     private final AdminService adminService;
     private final ModeratorService moderatorService;
     private final BucketService bucketService;
+    private final FileModelAssembler fileModelAssembler;
+    private final UserModelAssembler userModelAssembler;
+    private final EventModelAssembler eventModelAssembler;
 
     @GetMapping("/users")
-    public ResponseEntity<?> allUsers() {
-        List<User> user = adminService.allUsers();
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+    public CollectionModel<EntityModel<UserDto>> allUsers() {
+        List<EntityModel<UserDto>> users = adminService.allUsers().stream()
+                .map(userModelAssembler::toModel)
+                .collect(Collectors.toList());
 
-        List<UserDto> userDtoList = user.stream().map(UserDto::fromUser).collect(Collectors.toList());
-        return ResponseEntity.ok(userDtoList);
+//        List<UserDto> userDtoList = user.stream().map(UserDto::fromUser).collect(Collectors.toList());
+        return CollectionModel.of(users, linkTo(methodOn(AdminUserControllerV1.class).allUsers()).withSelfRel());
     }
 
     @GetMapping("/users/{id}")
@@ -100,14 +111,12 @@ public class AdminUserControllerV1 {
     }
 
     @GetMapping("/events")
-    public ResponseEntity<?> allEvents() {
-        List<Event> events = adminService.allEvents();
-        if (events == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+    public CollectionModel<EntityModel<EventDto>> allEvents() {
+        List<EntityModel<EventDto>> events = adminService.allEvents().stream()
+                .map(eventModelAssembler::toModel)
+                .collect(Collectors.toList());
 
-        List<EventDto> eventDtoList = events.stream().map(EventDto::fromEvent).collect(Collectors.toList());
-        return ResponseEntity.ok(eventDtoList);
+        return CollectionModel.of(events, linkTo(methodOn(ModeratorControllerV1.class).allEvents()).withSelfRel());
     }
 
     @GetMapping("/events/{id}")
@@ -142,10 +151,11 @@ public class AdminUserControllerV1 {
     }
 
     @GetMapping("/files")
-    public ResponseEntity<?> allFiles() {
-        List<File> fileList = moderatorService.allFiles();
-        if (fileList == null) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public CollectionModel<EntityModel<FileDto>> allFiles() {
+        List<EntityModel<FileDto>> fileList = moderatorService.allFiles().stream()
+                .map(fileModelAssembler::toModel)
+                .collect(Collectors.toList());
 
-        return ResponseEntity.ok(fileList);
+        return CollectionModel.of(fileList, linkTo(methodOn(ModeratorControllerV1.class).allFiles()).withSelfRel());
     }
 }

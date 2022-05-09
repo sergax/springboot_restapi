@@ -1,16 +1,20 @@
 package com.sergax.springboot_restapi.controller;
 
 import com.sergax.springboot_restapi.dto.EventDto;
+import com.sergax.springboot_restapi.dto.FileDto;
 import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.File;
-import com.sergax.springboot_restapi.model.Role;
+import com.sergax.springboot_restapi.model.assembler.EventModelAssembler;
+import com.sergax.springboot_restapi.model.assembler.FileModelAssembler;
+import com.sergax.springboot_restapi.service.AdminService;
 import com.sergax.springboot_restapi.service.ModeratorService;
 import com.sergax.springboot_restapi.service.UserServise;
 import com.sergax.springboot_restapi.service.AWSBucketService.BucketService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import software.amazon.awssdk.services.s3.model.ListObjectsResponse;
 import software.amazon.awssdk.services.s3.model.S3Object;
@@ -18,6 +22,8 @@ import software.amazon.awssdk.services.s3.model.S3Object;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 /**
  * by Aksenchenko Serhii on 27.04.2022
@@ -28,8 +34,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ModeratorControllerV1 {
     private final ModeratorService moderatorService;
-    private final UserServise userServise;
+    private final AdminService adminService;
     private final BucketService bucketService;
+    private final FileModelAssembler fileModelAssembler;
+    private final EventModelAssembler eventModelAssembler;
 
     @PostMapping("/files/set/{userId}/{fileId}")
     public ResponseEntity<?> setFileForUser(@PathVariable Long userId,
@@ -54,11 +62,12 @@ public class ModeratorControllerV1 {
     }
 
     @GetMapping("/files")
-    public ResponseEntity<?> allFiles() {
-        List<File> fileList = moderatorService.allFiles();
-        if (fileList == null) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public CollectionModel<EntityModel<FileDto>> allFiles() {
+        List<EntityModel<FileDto>> fileList = moderatorService.allFiles().stream()
+                .map(fileModelAssembler::toModel)
+                .collect(Collectors.toList());
 
-        return ResponseEntity.ok(fileList);
+        return CollectionModel.of(fileList, linkTo(methodOn(ModeratorControllerV1.class).allFiles()).withSelfRel());
     }
 
     @GetMapping("/files/buckets")
@@ -70,14 +79,12 @@ public class ModeratorControllerV1 {
     }
 
     @GetMapping("/events")
-    public ResponseEntity<?> allEvents() {
-        List<Event> events = userServise.allEvents();
-        if (events == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+    public CollectionModel<EntityModel<EventDto>> allEvents() {
+        List<EntityModel<EventDto>> events = adminService.allEvents().stream()
+                .map(eventModelAssembler::toModel)
+                .collect(Collectors.toList());
 
-        List<EventDto> eventDtoList = events.stream().map(EventDto::fromEvent).collect(Collectors.toList());
-        return ResponseEntity.ok(eventDtoList);
+        return CollectionModel.of(events, linkTo(methodOn(ModeratorControllerV1.class).allEvents()).withSelfRel());
     }
 
     @PutMapping("/users/roles/{userId}/{roleId}")

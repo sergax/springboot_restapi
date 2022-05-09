@@ -1,5 +1,7 @@
 package com.sergax.springboot_restapi.service.impl;
 
+import com.sergax.springboot_restapi.dto.EventDto;
+import com.sergax.springboot_restapi.dto.UserDto;
 import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.Role;
 import com.sergax.springboot_restapi.model.User;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * by Aksenchenko Serhii on 27.04.2022
@@ -47,11 +50,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<User> allUsers() {
+    public List<UserDto> allUsers() {
         List<User> listUsers = userRepository.findAll();
+        List<UserDto> users = listUsers.stream().map(UserDto::fromUser).collect(Collectors.toList());
 
         log.info("All Users : {}", listUsers);
-        return listUsers;
+        return users;
     }
 
     @Override
@@ -63,11 +67,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<Event> allEvents() {
+    public List<EventDto> allEvents() {
         List<Event> eventList = eventRepository.findAll();
+        List<EventDto> eventDtoList = eventList.stream().map(EventDto::fromEvent).collect(Collectors.toList());
 
         log.info("All Events : {}", eventList);
-        return eventList;
+        return eventDtoList;
     }
 
     @Override

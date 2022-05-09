@@ -1,5 +1,6 @@
 package com.sergax.springboot_restapi.service;
 
+import com.sergax.springboot_restapi.dto.EventDto;
 import com.sergax.springboot_restapi.dto.UserDto;
 import com.sergax.springboot_restapi.model.Event;
 import com.sergax.springboot_restapi.model.File;
@@ -21,11 +22,11 @@ public interface AdminService {
 
     void deleteUser(Long id);
 
-    List<User> allUsers();
+    List<UserDto> allUsers();
 
     Event getEventById(Long eventId);
 
-    List<Event> allEvents();
+    List<EventDto> allEvents();
 
     List<Role> allRoles();
 }
