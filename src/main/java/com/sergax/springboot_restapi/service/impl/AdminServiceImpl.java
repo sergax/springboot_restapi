@@ -3,7 +3,6 @@ package com.sergax.springboot_restapi.service.impl;
 import com.sergax.springboot_restapi.dto.UserDto;
 import com.sergax.springboot_restapi.model.Role;
 import com.sergax.springboot_restapi.model.User;
-import com.sergax.springboot_restapi.repository.EventRepository;
 import com.sergax.springboot_restapi.repository.RoleRepository;
 import com.sergax.springboot_restapi.repository.UserRepository;
 import com.sergax.springboot_restapi.service.*;
@@ -11,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +21,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @AllArgsConstructor
 public class AdminServiceImpl implements AdminService {
-    private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
