@@ -24,23 +24,8 @@ import java.io.IOException;
 public class BucketService {
     private final S3ClientConfig config;
 
-    public S3Client gimmeClient() {
-        Region region = Region.EU_CENTRAL_1;
-        return S3Client.builder()
-                .region(region)
-                .credentialsProvider(
-                        StaticCredentialsProvider.create(
-                                AwsBasicCredentials.create(
-                                        config.getAccessId(),
-                                        config.getSecretKey()
-                                )
-                        )
-                )
-                .build();
-    }
-
     public ListObjectsResponse listBucketContent() {
-        S3Client s3Client = gimmeClient();
+        S3Client s3Client = config.gimmeClient();
         ListObjectsResponse response = s3Client.listObjects(ListObjectsRequest
                 .builder()
                 .bucket(config.getBucketName())
@@ -53,7 +38,7 @@ public class BucketService {
     }
 
     public void deleteObject(String fileName) {
-        S3Client s3Client = gimmeClient();
+        S3Client s3Client = config.gimmeClient();
         s3Client.deleteObject(DeleteObjectRequest.builder()
                 .bucket(config.getBucketName())
                 .key(fileName)
@@ -62,9 +47,8 @@ public class BucketService {
         s3Client.close();
     }
 
-
     public void putObject(File file) throws IOException {
-        S3Client s3Client = gimmeClient();
+        S3Client s3Client = config.gimmeClient();
         java.io.File newFile = new java.io.File(file.getLocation());
         s3Client.putObject(PutObjectRequest
                         .builder()
