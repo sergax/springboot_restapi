@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserServise {
     private final EventRepository eventRepository;
     private final FileRepository fileRepository;
 
-
     @Override
     public User getByLogin(String login) {
         User user = userRepository.findByLogin(login);

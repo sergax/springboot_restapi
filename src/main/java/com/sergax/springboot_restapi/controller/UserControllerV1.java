@@ -49,7 +49,8 @@ public class UserControllerV1 {
                 .map(fileModelAssembler::toModel)
                 .collect(Collectors.toList());
 
-        return CollectionModel.of(fileList, linkTo(methodOn(ModeratorControllerV1.class).allFiles()).withSelfRel());
+        return CollectionModel.of(fileList,
+                linkTo(methodOn(ModeratorControllerV1.class).allFiles()).withSelfRel());
     }
 
     @GetMapping("/events/{id}")
@@ -66,6 +67,7 @@ public class UserControllerV1 {
                 .map(eventModelAssembler::toModel)
                 .collect(Collectors.toList());
 
-        return CollectionModel.of(events, linkTo(methodOn(ModeratorControllerV1.class).allEvents()).withSelfRel());
+        return CollectionModel.of(events,
+                linkTo(methodOn(ModeratorControllerV1.class).allEvents()).withSelfRel());
     }
 }

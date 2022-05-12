@@ -21,7 +21,7 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String email;
-    private List<RoleDto> roles;
+    private List<String> roles;
     private List<EventDto> events;
 
     public static UserDto fromUser(User user) {
@@ -32,9 +32,9 @@ public class UserDto {
         userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail());
 
-        List<RoleDto> roles = new ArrayList<>();
+        List<String> roles = new ArrayList<>();
         for (Role role : user.getRoles()) {
-            roles.add(RoleDto.fromRole(role));
+            roles.add(String.valueOf(role));
         }
 
         List<EventDto> events = new ArrayList<>();
