@@ -19,9 +19,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtTokenProvider jwtTokenProvider;
 
-    private static final String ADMIN_ENDPOINT = "/api/v1/admin/**"; //$2a$12$Qi6jaxizr7BA1IqIV9Llt.9O0T8HoBf2Vooz1OynIM7DW7HHunVd2
-    private static final String MODER_ENDPOINT = "/api/v1/moder/**"; //$2a$12$iTfQwUzjUvwrE5EiB8oiJe/zWbDBPSwAsYU1B2TXWi92XAcQrKbSG
-    private static final String LOGIN_ENDPOINT = "/api/v1/auth/login"; //$2a$12$2qZR.SBkexktbWcHMghEkOfbMggrw/wk5O1yWTzoCj/XLI.64C68a
+    private static final String ADMIN_ENDPOINT = "/api/v1/admin/**"; //password : admin
+    private static final String MODER_ENDPOINT = "/api/v1/moder/**"; //password : moder
+    private static final String LOGIN_ENDPOINT = "/api/v1/auth/login"; //password : login
 
     @Bean
     @Override
